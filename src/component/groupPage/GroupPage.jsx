@@ -21,8 +21,10 @@ export default function GroupPage() {
           <MyGroupList></MyGroupList>
         </div>
         <div className="group-outer-box">
-          <h1>그룹 탐색</h1>
-          <button onClick={handelCreateButtonClick}>그룹 생성</button>
+          <div className="group-create-button">
+            <h1>그룹 탐색</h1>
+            <button onClick={handelCreateButtonClick}>그룹 생성</button>
+          </div>
           <GroupList></GroupList>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import './Group.css'
 
 export default function Group({ groups }) {
   const authorization = sessionStorage.getItem("Authorization");
@@ -22,16 +23,16 @@ export default function Group({ groups }) {
         }
         return response.json();
       })
-      .then((data) => {})
-      .catch((error) => {});
+      .then((data) => { })
+      .catch((error) => { });
   };
 
   return (
-    <div className="">
+    <div className="GroupComponent">
       {groups.map((group) => {
         return (
           <div
-            className=""
+            className="group-Container"
             onClick={(e) => {
               e.preventDefault();
 
@@ -40,7 +41,7 @@ export default function Group({ groups }) {
               }
             }}
           >
-            <div>
+            <div className="group-Container-Detail">
               <h3>{group.groupName}</h3>
               <p>{group.description}</p>
               <p>{group.leaderNickname}</p>

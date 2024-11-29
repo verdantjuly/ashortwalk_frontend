@@ -1,0 +1,40 @@
+.GroupComponent {
+    width: 100%;
+}
+
+.GroupComponent .group-Container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+
+    border: 1px solid #D4D2E3;
+    border-radius: 24px;
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 30px 36px;
+}
+
+.GroupComponent .group-Container .group-Container-Detail {}
+
+.GroupComponent .group-Container .group-Container-Detail h3 {
+    margin: 0;
+}
+
+.GroupComponent .group-Container .group-Container-Detail p {
+    font-size: 14px;
+    color: #A0A3BD;
+    line-height: 16px;
+}
+
+.GroupComponent .group-Container .group-join-button {
+    background-color: white;
+    border: none;
+    color: #0094ff;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 8px;
+    padding: 0 4px;
+}

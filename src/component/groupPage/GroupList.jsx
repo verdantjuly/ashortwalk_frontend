@@ -28,7 +28,7 @@ export default function GroupList() {
   }, [currentPage]);
   console.log(totalPages);
   return (
-    <div>
+    <div className="GroupList">
       <Group groups={groups}></Group>
       <Pagination
         currentPage={currentPage}

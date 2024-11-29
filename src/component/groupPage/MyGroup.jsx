@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import './MyGroup.css'
+
 export default function MyGroup({ groups }) {
   const navigate = useNavigate();
   const token = window.sessionStorage.getItem("Authorization");
@@ -31,7 +33,7 @@ export default function MyGroup({ groups }) {
       .then((data) => {
         window.location.href = "/group";
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
   useState(() => {
     const fetchUserId = (id) => {
@@ -51,22 +53,26 @@ export default function MyGroup({ groups }) {
         .then((data) => {
           setLoginId(data.id);
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     fetchUserId();
   }, []);
 
   return (
-    <div className="">
+    <div className="myGroup">
       {groups.map((group) => {
         console.log(group.leaderUserId);
         console.log(loginId);
         return (
-          <div className="">
-            <h3>{group.groupName}</h3>
+          <div className="myGroupContainer">
+            <div className="myGroupDetail">
+              <h3>{group.groupName}</h3>
+              <p>{group.description}</p>
+              <p>{group.leaderNickname}</p>
+            </div>
             {loginId === group.leaderUserId ? (
-              <div>
+              <div className="myGroupButton">
                 <button onClick={() => handelUpdateButtonClick(group.id)}>
                   수정
                 </button>
@@ -77,8 +83,7 @@ export default function MyGroup({ groups }) {
             ) : (
               <></>
             )}
-            <p>{group.description}</p>
-            <p>{group.leaderNickname}</p>
+
           </div>
         );
       })}

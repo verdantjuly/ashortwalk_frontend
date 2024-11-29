@@ -15,26 +15,41 @@ export default function FeedPage() {
   const [feedlist, setFeedlist] = useState([]); //피드 목록
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [myGroup, setMyGroup] = useState({});
 
   //화면 레더링 시 feed목록가져오기  api/groups/:groupId/feeds
   useEffect(() => {
     const findFeed = async () => {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/groups/${groupId}/feeds?page=${currentPage}`
+        `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/groups/${groupId}/feeds?page=${currentPage}`
       );
       setFeedlist(response.data);
     };
     const countFeeds = async () => {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/groups/${groupId}/feeds/count`
+        `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/groups/${groupId}/feeds/count`
       );
       setTotalPages(response.data);
     };
+    const findMyGroup = async () => {
+      try {
+        const response = await axios.get(
+          `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/groups/${groupId}`);
+
+        setMyGroup(response.data);
+        console.log("Response from API:", response.data);
+        // console.log(response);
+      } catch (error) {
+        console.error("Error fetching group:", error.response?.data || error.message);
+        alert(`Error: ${error.response?.data?.message || "Failed to fetch group"}`);
+      }
+
+    };
+
     findFeed();
     countFeeds();
+    findMyGroup();
   }, [currentPage, groupId]);
-  console.log("피드 목록 가져오기");
-  console.log(feedlist);
 
   // const [feeds, setFeeds] = useState([]); //피드 목록상태
   const [content, setContent] = useState(""); //피드입력 상태
@@ -52,7 +67,7 @@ export default function FeedPage() {
     try {
       const feedContentWrite = async () => {
         const response = await axios.post(
-          `http://127.0.0.1:8000/api/groups/${groupId}/feeds`,
+          `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/groups/${groupId}/feeds`,
           { content },
           {
             headers: {
@@ -66,20 +81,20 @@ export default function FeedPage() {
         }
       };
       feedContentWrite();
-    } catch (e) {}
+    } catch (e) { }
   };
 
-  // 댓글 수정 시작
+  // 피드 수정 시작
   const startEditing = (id, currentContent) => {
     setEditingContentId(id);
     setEditingContent(currentContent);
   };
 
-  // 댓글 수정 저장
+  // 피드 수정 저장
   const saveEditing = async (id) => {
     try {
       const response = await axios.patch(
-        `http://127.0.0.1:8000/api/groups/${groupId}/feeds/${id}`,
+        `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/groups/${groupId}/feeds/${id}`,
         { content: editingContent },
         {
           headers: {
@@ -94,15 +109,15 @@ export default function FeedPage() {
         )
       );
       setEditingContentId(null); // 수정 모드 종료
-    } catch (error) {}
+    } catch (error) { }
   };
 
-  // 댓글 수정 취소
+  // 피드 수정 취소
   const cancelEditing = () => {
     setEditingContentId(null);
     setEditingContent("");
   };
-
+  //======================================================================================
   return (
     <div className="FeedPage">
       <Header></Header>
@@ -112,9 +127,9 @@ export default function FeedPage() {
         <div className="FeedContent">
           <div className="FeedInfo">
             <div className="FeedInfoText">
-              <h2>산책 좋아</h2>
-              <p>산책이 너무 좋은 사람들</p>
-              <p>leader nickname</p>
+              <h2>{myGroup.groupName}</h2>
+              <p>{myGroup.description}</p>
+              <p>{myGroup.leaderNickname}</p>
             </div>
             <form onSubmit={handleSubmin}>
               <input
@@ -149,7 +164,7 @@ export default function FeedPage() {
                       <div className="CFeeddetail">
                         <div className="feeddetailBox">
                           <p>{feed.content}</p>
-                          <p>{feed.groupName}</p>
+                          <p>{myGroup.groupName}</p>
                           <p>{feed.createdAt.split("T")[0]}</p>
                         </div>
 
@@ -182,7 +197,7 @@ export default function FeedPage() {
                                       (feeds) => feeds.id !== feed.id
                                     )
                                   );
-                                } catch (e) {}
+                                } catch (e) { }
                               }
                             }}
                           >
@@ -195,9 +210,6 @@ export default function FeedPage() {
                 </div>
               );
             })}
-            {/* <p>너무 너무 좋네요</p>
-                        <p>nickname</p>
-                        <p>2024.11.27</p> */}
           </div>
           <Pagination
             currentPage={currentPage}
