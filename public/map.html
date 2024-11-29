@@ -162,7 +162,6 @@
 
       recordButton.addEventListener("click", () => {
         if (isRecording) {
-          console.log(sttKey);
           stopRecording();
         } else {
           startRecording();
@@ -195,8 +194,8 @@
       };
 
       function encodeWAV(channelData, sampleRate) {
-        const buffer = Buffer.alloc(44 + channelData.length * 2); // Replace Buffer() with Buffer.alloc()
-        const view = new DataView(buffer.buffer);
+        const buffer = new ArrayBuffer(44 + channelData.length * 2);
+        const view = new DataView(buffer);
 
         writeString(view, 0, "RIFF");
         view.setUint32(4, 36 + channelData.length * 2, true);
@@ -220,7 +219,7 @@
           offset += 2;
         }
 
-        return new Blob([view], { type: "audio/wav" });
+        return new Blob([buffer], { type: "audio/wav" });
       }
 
       function writeString(view, offset, string) {
