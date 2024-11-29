@@ -9,14 +9,16 @@
         width: 280px;
         height: 700px;
       }
+
       #result {
         font-size: 13px;
         text-align: center;
         font-weight: 400;
         color: #0094ff;
       }
+
       #address {
-        width: 180px;
+        width: 160px;
         padding: 5px 10px;
         border-radius: 5px;
         background-color: #42adfb;
@@ -28,20 +30,28 @@
         color: white;
       }
 
-      #drawLineBtn {
-        padding: 5px 10px;
+      #drawLineBtn,
+      #recordButton {
+        padding: 5px;
         font-size: 10px;
         cursor: pointer;
-        border: 1px solid #42adfb; /* 버튼 테두리 색상 */
-        border-radius: 4px; /* 버튼 둥글게 */
-        background-color: #fff; /* 버튼 배경색 */
-        color: #42adfb; /* 버튼 텍스트 색상 */
+        border: 1px solid #42adfb;
+        /* 버튼 테두리 색상 */
+        border-radius: 4px;
+        /* 버튼 둥글게 */
+        background-color: #fff;
+        /* 버튼 배경색 */
+        color: #42adfb;
+        /* 버튼 텍스트 색상 */
       }
 
       /* 버튼 호버 효과 */
-      #drawLineBtn:hover {
-        background-color: #42adfb; /* 버튼 배경 색상 변경 */
-        color: white; /* 버튼 텍스트 색상 변경 */
+      #drawLineBtn:hover,
+      #recordButton:hover {
+        background-color: #42adfb;
+        /* 버튼 배경 색상 변경 */
+        color: white;
+        /* 버튼 텍스트 색상 변경 */
       }
 
       #addr {
@@ -77,10 +87,12 @@
     </style>
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=BiGizFCY2P9VSwbZPJ4Mz1YuVwY7dEyH8dna6U4D"></script>
   </head>
+
   <body>
     <div id="map_div"></div>
     <div id="search-box">
       <input id="address" placeholder="출발지를 입력하세요." />
+      <button id="recordButton">🎙️</button>
       <button id="drawLineBtn">전송</button>
     </div>
 
@@ -88,6 +100,136 @@
     <div id="route"></div>
 
     <script>
+      // Azure Key
+      let gptKey = "";
+      let sttKey = "";
+      async function key() {
+        const keyRespnose = await fetch(
+          "https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/key"
+        );
+        const keyResult = await keyRespnose.json();
+        gptKey = keyResult.gptKey;
+        sttKey = keyResult.sttKey;
+      }
+
+      key();
+      // STT 로직
+      let isRecording = false;
+      let mediaRecorder;
+      let audioChunks = [];
+
+      const recordButton = document.getElementById("recordButton");
+      const speechTextElement = document.getElementById("address");
+
+      async function startRecording() {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+          audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+          const arrayBuffer = await audioBlob.arrayBuffer();
+          const audioBuffer = await new AudioContext().decodeAudioData(
+            arrayBuffer
+          );
+
+          const wavBlob = encodeWAV(
+            audioBuffer.getChannelData(0),
+            audioBuffer.sampleRate
+          );
+          const wavUrl = URL.createObjectURL(wavBlob);
+
+          handleSpeechToText(wavBlob);
+
+          audioChunks = [];
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        recordButton.textContent = "✔️";
+      }
+
+      function stopRecording() {
+        mediaRecorder.stop();
+        isRecording = false;
+        recordButton.textContent = "🎙️";
+      }
+
+      recordButton.addEventListener("click", () => {
+        if (isRecording) {
+          console.log(sttKey);
+          stopRecording();
+        } else {
+          startRecording();
+        }
+      });
+
+      async function handleSpeechToText(audioBlob) {
+        try {
+          const response = await sendAudioToServer(audioBlob); // Replace with actual API request
+          speechTextElement.value = response; // Display converted text
+        } catch (error) {
+          console.error("Error occurred:", error);
+        }
+      }
+
+      const sendAudioToServer = async (audioBlob) => {
+        const endPoint =
+          "https://koreacentral.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=ko-KR";
+
+        const response = await fetch(endPoint, {
+          method: "POST",
+          headers: {
+            "Ocp-Apim-Subscription-Key": sttKey,
+            "Content-Type": "audio/wav",
+          },
+          body: audioBlob,
+        });
+        const data = await response.json();
+        return data.DisplayText;
+      };
+
+      function encodeWAV(channelData, sampleRate) {
+        const buffer = new ArrayBuffer(44 + channelData.length * 2);
+        const view = new DataView(buffer);
+
+        writeString(view, 0, "RIFF");
+        view.setUint32(4, 36 + channelData.length * 2, true);
+        writeString(view, 8, "WAVE");
+        writeString(view, 12, "fmt ");
+
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+
+        writeString(view, 36, "data");
+        view.setUint32(40, channelData.length * 2, true);
+
+        let offset = 44;
+        for (let i = 0; i < channelData.length; i++) {
+          view.setInt16(offset, channelData[i] * 32767, true);
+          offset += 2;
+        }
+
+        return new Blob([view], { type: "audio/wav" });
+      }
+
+      function writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      }
+
+      // 지도 로직
       let address;
       const { Tmapv2 } = window;
       const headers = { appKey: "BiGizFCY2P9VSwbZPJ4Mz1YuVwY7dEyH8dna6U4D" };
@@ -106,11 +248,6 @@
         resultdrawArr = [];
         intermediatePoints = [];
         addresses = [];
-        const keyRespnose = await fetch(
-          "https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/key/gpt"
-        );
-        const keyResult = await keyRespnose.json();
-        const key = keyResult.gptKey;
         const promptData = {
           messages: [
             {
@@ -129,7 +266,7 @@
           "https://warme-m3p2wioi-francecentral.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview",
           {
             method: "POST",
-            headers: { "api-key": key, "Content-Type": "application/json" },
+            headers: { "api-key": gptKey, "Content-Type": "application/json" },
             body: JSON.stringify(promptData),
           }
         );
