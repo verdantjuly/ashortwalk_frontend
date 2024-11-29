@@ -8,10 +8,10 @@ export default function EmailLogin() {
   const [password, setPassword] = useState("");
 
   const handleInputChange = (e) => {
-    if ("email" == e.target.id) {
+    if ("email" === e.target.id) {
       setEmail(e.target.value.trim());
     }
-    if ("password" == e.target.id) {
+    if ("password" === e.target.id) {
       setPassword(e.target.value.trim());
     }
   };

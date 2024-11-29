@@ -40,10 +40,10 @@ export default function GroupUpdate() {
   }, []); // 빈 배열을 넣어 컴포넌트 마운트 시 한 번만 실행되도록 함
 
   const handleInputChange = (e) => {
-    if ("groupName" == e.target.id) {
+    if ("groupName" === e.target.id) {
       setGroupName(e.target.value.trim());
     }
-    if ("description" == e.target.id) {
+    if ("description" === e.target.id) {
       setDescription(e.target.value.trim());
     }
   };

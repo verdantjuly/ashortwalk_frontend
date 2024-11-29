@@ -134,7 +134,7 @@
           }
         );
 
-        if (gptResponse.status == 429) {
+        if (gptResponse.status === 429) {
           window.location.reload();
           alert(
             "AI가 과로하여 휴식이 필요합니다. 잠시 후에 다시 시도해 주세요."

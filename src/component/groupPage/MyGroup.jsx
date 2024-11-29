@@ -65,7 +65,7 @@ export default function MyGroup({ groups }) {
         return (
           <div className="">
             <h3>{group.groupName}</h3>
-            {loginId == group.leaderUserId ? (
+            {loginId === group.leaderUserId ? (
               <div>
                 <button onClick={() => handelUpdateButtonClick(group.id)}>
                   수정

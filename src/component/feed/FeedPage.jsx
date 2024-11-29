@@ -32,7 +32,7 @@ export default function FeedPage() {
     };
     findFeed();
     countFeeds();
-  }, [currentPage]);
+  }, [currentPage, groupId]);
   console.log("피드 목록 가져오기");
   console.log(feedlist);
 
@@ -66,7 +66,7 @@ export default function FeedPage() {
         }
       };
       feedContentWrite();
-    } catch (e) { }
+    } catch (e) {}
   };
 
   // 댓글 수정 시작
@@ -94,7 +94,7 @@ export default function FeedPage() {
         )
       );
       setEditingContentId(null); // 수정 모드 종료
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 댓글 수정 취소
@@ -157,7 +157,9 @@ export default function FeedPage() {
                           {/* 피드수정 */}
                           {editingContentId !== feed.id && (
                             <button
-                              onClick={() => startEditing(feed.id, feed.content)}
+                              onClick={() =>
+                                startEditing(feed.id, feed.content)
+                              }
                             >
                               수정
                             </button>
@@ -176,20 +178,20 @@ export default function FeedPage() {
                                     }
                                   );
                                   setFeedlist(
-                                    feedlist.filter((feeds) => feeds.id !== feed.id)
+                                    feedlist.filter(
+                                      (feeds) => feeds.id !== feed.id
+                                    )
                                   );
-                                } catch (e) { }
+                                } catch (e) {}
                               }
                             }}
                           >
                             삭제
                           </button>
-
                         </div>
                       </div>
                     )}
                   </div>
-
                 </div>
               );
             })}

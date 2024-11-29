@@ -8,10 +8,10 @@ export default function GroupCreate() {
   const token = window.sessionStorage.getItem("Authorization");
 
   const handleInputChange = (e) => {
-    if ("groupName" == e.target.id) {
+    if ("groupName" === e.target.id) {
       setGroupName(e.target.value.trim());
     }
-    if ("description" == e.target.id) {
+    if ("description" === e.target.id) {
       setDescription(e.target.value.trim());
     }
   };

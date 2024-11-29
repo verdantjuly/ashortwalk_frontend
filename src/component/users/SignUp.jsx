@@ -11,19 +11,19 @@ export default function SignUp() {
   const [confirm, setConfirm] = useState("");
 
   const handleInputChange = (e) => {
-    if ("email" == e.target.id) {
+    if ("email" === e.target.id) {
       setEmail(e.target.value.trim()); // input 값이 변경될 때 상태 업데이트
     }
-    if ("number" == e.target.id) {
+    if ("number" === e.target.id) {
       setNumber(e.target.value.trim());
     }
-    if ("nickname" == e.target.id) {
+    if ("nickname" === e.target.id) {
       setNickname(e.target.value.trim());
     }
-    if ("password" == e.target.id) {
+    if ("password" === e.target.id) {
       setPassword(e.target.value.trim());
     }
-    if ("confirm" == e.target.id) {
+    if ("confirm" === e.target.id) {
       setConfirm(e.target.value.trim());
     }
   };

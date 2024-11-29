@@ -36,7 +36,7 @@ export default function Header() {
       }
     }
     authCheck();
-  }, []);
+  }, [authorization]);
 
   function logout() {
     sessionStorage.removeItem("Authorization");

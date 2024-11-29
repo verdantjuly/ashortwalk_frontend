@@ -30,7 +30,7 @@ export default function AdminPage() {
     }
     fetchTotalPages();
     fetchReports();
-  }, []);
+  }, [authorization, currentPage]);
 
   async function deleteContent(reportId) {
     const response = await axios.delete(

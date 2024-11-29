@@ -17,7 +17,7 @@ export default function CommentPage() {
       setComment(response.data);
     }
     fetchComment();
-  }, []);
+  }, [id]);
 
   return (
     <div>
