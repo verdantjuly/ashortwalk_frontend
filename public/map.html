@@ -195,8 +195,8 @@
       };
 
       function encodeWAV(channelData, sampleRate) {
-        const buffer = new ArrayBuffer(44 + channelData.length * 2);
-        const view = new DataView(buffer);
+        const buffer = Buffer.alloc(44 + channelData.length * 2); // Replace Buffer() with Buffer.alloc()
+        const view = new DataView(buffer.buffer);
 
         writeString(view, 0, "RIFF");
         view.setUint32(4, 36 + channelData.length * 2, true);
