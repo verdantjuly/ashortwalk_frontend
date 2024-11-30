@@ -5,9 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Pagination from "../posts/Pagination";
-
-// http://localhost:3000/groups/a78d9fc6-759a-4056-ab7e-42f8278ef76c/feeds
-// http://127.0.0.1:8000/api/groups/${groupId}/feeds?page=${currentPage}
+import Chat from "./Chat";
 
 export default function FeedPage() {
   const authorization = window.sessionStorage.getItem("Authorization");
@@ -34,16 +32,11 @@ export default function FeedPage() {
     const findMyGroup = async () => {
       try {
         const response = await axios.get(
-          `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/groups/${groupId}`);
+          `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/groups/${groupId}`
+        );
 
         setMyGroup(response.data);
-        console.log("Response from API:", response.data);
-        // console.log(response);
-      } catch (error) {
-        console.error("Error fetching group:", error.response?.data || error.message);
-        alert(`Error: ${error.response?.data?.message || "Failed to fetch group"}`);
-      }
-
+      } catch (error) {}
     };
 
     findFeed();
@@ -81,7 +74,7 @@ export default function FeedPage() {
         }
       };
       feedContentWrite();
-    } catch (e) { }
+    } catch (e) {}
   };
 
   // 피드 수정 시작
@@ -109,7 +102,7 @@ export default function FeedPage() {
         )
       );
       setEditingContentId(null); // 수정 모드 종료
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 피드 수정 취소
@@ -197,7 +190,7 @@ export default function FeedPage() {
                                       (feeds) => feeds.id !== feed.id
                                     )
                                   );
-                                } catch (e) { }
+                                } catch (e) {}
                               }
                             }}
                           >
@@ -220,7 +213,7 @@ export default function FeedPage() {
 
         {/* 피드채팅 */}
         <div className="FeedChating">
-          <p>채팅부분</p>
+          <Chat myGroup={myGroup} />
         </div>
       </div>
 

@@ -6,7 +6,39 @@ export default function Header() {
   const authorization = window.sessionStorage.getItem("Authorization");
   const [isLogined, setIsLogined] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  async function refreshAccessToken() {
+    const response = await fetch(
+      "https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/auth/refresh",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authorization,
+        },
+      }
+    );
 
+    if (!response.ok) {
+      sessionStorage.removeItem("Authorization");
+      sessionStorage.removeItem("token");
+      setIsLogined(false);
+      alert("세션이 만료되었습니다. 재로그인 해 주세요.");
+
+      if (
+        !(
+          window.location.pathname === "/" ||
+          window.location.pathname === "/posts" ||
+          window.location.pathname === "/login"
+        )
+      ) {
+        window.location.href = "/login";
+      }
+    }
+
+    const data = await response.json();
+    sessionStorage.setItem("Authorization", data.accessToken);
+    return;
+  }
   useEffect(() => {
     async function authCheck() {
       try {
@@ -17,19 +49,11 @@ export default function Header() {
           }
         );
 
-        if (response.status === 401) {
-          setIsLogined(false);
-          if (
-            !(
-              window.location.pathname === "/" ||
-              window.location.pathname === "/posts" ||
-              window.location.pathname === "/login"
-            )
-          ) {
-            alert("로그인이 필요한 페이지입니다.");
-          }
-        } else {
+        if (200 <= response.status < 300) {
           setIsLogined(true);
+        } else if (response.status === 401) {
+          refreshAccessToken();
+          window.location.reload();
         }
       } catch (err) {
         console.error(err);

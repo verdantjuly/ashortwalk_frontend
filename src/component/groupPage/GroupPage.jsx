@@ -17,7 +17,7 @@ export default function GroupPage() {
       <Header />
       <div className="group-container">
         <div className="group-outer-box">
-          <h1>내 그룹</h1>
+          <div className="mygroup-title-box"><h1>내 그룹</h1></div>
           <MyGroupList></MyGroupList>
         </div>
         <div className="group-outer-box">

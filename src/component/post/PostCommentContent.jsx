@@ -39,7 +39,6 @@ export default function PostCommentContent() {
           }
         );
         setContent("");
-        // console.log("작성된 댓글:",data);
       };
 
       setComments([...comments]);

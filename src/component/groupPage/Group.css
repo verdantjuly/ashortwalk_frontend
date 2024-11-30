@@ -1,9 +1,10 @@
 .GroupComponent {
-    width: 100%;
+    /* width: 100%; */
 }
 
+
 .GroupComponent .group-Container {
-    width: 100%;
+    width: 35VW;
     display: flex;
     flex-direction: row;
     align-items: start;
@@ -14,9 +15,12 @@
     background-color: white;
     margin-bottom: 20px;
     padding: 30px 36px;
+    box-sizing: border-box;
 }
 
-.GroupComponent .group-Container .group-Container-Detail {}
+.GroupComponent .group-Container .group-Container-Detail {
+    text-align: start;
+}
 
 .GroupComponent .group-Container .group-Container-Detail h3 {
     margin: 0;
@@ -35,6 +39,20 @@
     font-size: 14px;
     cursor: pointer;
     display: inline-block;
-    margin-left: 8px;
     padding: 0 4px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .GroupComponent .group-Container {
+        width: 60VW;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+    }
+
+    .GroupComponent .group-Container .group-join-button {
+        width: 100%;
+    }
 }

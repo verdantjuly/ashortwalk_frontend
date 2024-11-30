@@ -26,7 +26,7 @@ export default function GroupList() {
     findGroup();
     findTotalPages();
   }, [currentPage]);
-  console.log(totalPages);
+
   return (
     <div className="GroupList">
       <Group groups={groups}></Group>

@@ -12,7 +12,7 @@ export default function ReportPage() {
 
   async function report() {
     const authorization = window.sessionStorage.getItem("Authorization");
-    console.log(authorization);
+
     const response = await axios.post(
       `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/reports`,
       body,

@@ -33,13 +33,16 @@
   background-color: #0094ff;
   color: white;
 }
+
 /* 이전/다음 버튼에 여백 추가 */
 .prev-btn,
 .next-btn {
-  padding: 0 15px; /* 좌우에 여백을 추가 */
-  font-size: 18px; /* 버튼의 크기 증가 */
-  background-color: white;
+  padding: 0 15px;
+  /* 좌우에 여백을 추가 */
+  font-size: 18px;
+  /* 버튼의 크기 증가 */
   border: none;
 
   color: #72b6ff;
+  background-color: transparent;
 }

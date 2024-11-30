@@ -1,6 +1,7 @@
 import Footer from "../Footer";
 import Header from "../Header";
 import React, { useState } from "react";
+import './GroupCreate.css'
 
 export default function GroupCreate() {
   const [groupName, setGroupName] = useState("");
@@ -41,7 +42,7 @@ export default function GroupCreate() {
       .then((data) => {
         window.location.href = "/groups";
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   return (

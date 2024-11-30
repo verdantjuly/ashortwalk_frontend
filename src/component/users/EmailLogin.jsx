@@ -39,6 +39,7 @@ export default function EmailLogin() {
       })
       .then((data) => {
         window.sessionStorage.setItem("Authorization", data.accessToken);
+        window.sessionStorage.setItem("token", data.refreshToken);
         window.location.href = "/posts";
       })
       .catch((error) => {});

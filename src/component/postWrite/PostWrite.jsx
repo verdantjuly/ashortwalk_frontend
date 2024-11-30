@@ -52,7 +52,6 @@ export default function PostWrite() {
     data.append("content", formData.content);
     data.append("category", formData.category);
     if (file) {
-      console.log(file);
       data.append("file", file);
     }
 

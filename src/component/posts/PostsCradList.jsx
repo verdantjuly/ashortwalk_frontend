@@ -22,7 +22,7 @@ export default function PostsCardList() {
         `https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/api/posts/count`
       );
       const data = response.data;
-      console.log(data);
+
       settotalPages(data.count);
     };
     findPost();
