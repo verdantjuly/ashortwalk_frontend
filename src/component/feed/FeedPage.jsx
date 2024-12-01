@@ -157,7 +157,7 @@ export default function FeedPage() {
                       <div className="CFeeddetail">
                         <div className="feeddetailBox">
                           <p>{feed.content}</p>
-                          <p>{myGroup.groupName}</p>
+                          <p>{feed.nickname}</p>
                           <p>{feed.createdAt.split("T")[0]}</p>
                         </div>
 

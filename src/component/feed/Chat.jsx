@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
-const SOCKET_URL =
-  "https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/chat";
+const SOCKET_URL = "http://localhost:8000";
+//"https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/chat";
 
 const ChatComponent = ({ myGroup }) => {
   const socketRef = useRef(null);
@@ -35,7 +35,7 @@ const ChatComponent = ({ myGroup }) => {
     socketRef.current.on("chat:message", (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
     });
-    socketRef.current.emit("get:prev", { room: groupId, nickname });
+    socketRef.current.emit("get:prev", { room: groupId });
 
     return () => {
       socketRef.current.disconnect();
