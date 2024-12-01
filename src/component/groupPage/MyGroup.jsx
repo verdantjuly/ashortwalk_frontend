@@ -62,8 +62,7 @@ export default function MyGroup({ groups }) {
   return (
     <div className="myGroup">
       {groups.map((group) => {
-        console.log(group.leaderUserId);
-        console.log(loginId);
+
         return (
           <div className="myGroupContainer">
             <div className="myGroupDetail">
