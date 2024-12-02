@@ -117,7 +117,12 @@ export default function SignUp() {
               value={email}
               onChange={handleInputChange}
             ></input>
-            <button onClick={handleEmailSubmit}>전송</button>
+            <button
+              className="singup-verify-button"
+              onClick={handleEmailSubmit}
+            >
+              전송
+            </button>
           </div>
           <div className="form-row">
             <label>인증번호</label>
@@ -127,7 +132,12 @@ export default function SignUp() {
               value={number}
               onChange={handleInputChange}
             ></input>
-            <button onClick={handleVerifySubmit}>인증</button>
+            <button
+              className="singup-verify-button"
+              onClick={handleVerifySubmit}
+            >
+              인증
+            </button>
           </div>
           <div className="form-row">
             <label>닉네임</label>

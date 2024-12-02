@@ -41,7 +41,7 @@ const ChatComponent = ({ myGroup }) => {
     return () => {
       socketRef.current.disconnect();
     };
-  }, []);
+  }, [groupId, token]);
 
   function handleSendMessage() {
     if (messageInput) {
