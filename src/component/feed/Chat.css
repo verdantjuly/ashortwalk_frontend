@@ -1,0 +1,60 @@
+.chat-input {
+  width: 80%;
+  height: 30px;
+  border-radius: 10px;
+  border: hsl(205, 100%, 50%) 1px solid;
+  padding: 0px 5px;
+}
+.chat-input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.chat-button {
+  margin-left: 10px;
+  font-size: 16px;
+  font-style: bold;
+  width: 10%;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background-color: #0094ff;
+}
+
+.chat-box,
+.my-chat-box {
+  border-radius: 10px;
+  width: 80%;
+  margin: 10px 0px;
+  padding: 10px;
+}
+
+.chat-box > p {
+  margin: 0px !important;
+  padding: 0px !important;
+  color: black;
+}
+.my-chat-box > p {
+  margin: 0px;
+  padding: 0px;
+  color: white;
+}
+
+.my-chat-box {
+  background-color: #0094ff;
+}
+.chat-box {
+  border: #0094ff 1px solid;
+}
+.chat-nickname {
+  font-size: 13px;
+}
+.chat-notice {
+  font-size: 13px;
+  margin: 0px 10px !important;
+  padding: 0px !important;
+  color: rgb(59, 59, 59);
+}

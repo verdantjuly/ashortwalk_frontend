@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
+import "./Chat.css";
 const SOCKET_URL =
   "https://shortwalk-f3byftbfe4czehcg.koreacentral-01.azurewebsites.net/chat";
 
@@ -9,7 +10,7 @@ const ChatComponent = ({ myGroup }) => {
   const messageListRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
-  const { groupName, id: groupId } = myGroup;
+  const { id: groupId } = myGroup;
   const [nickname, setNickname] = useState("");
   const token = sessionStorage.getItem("Authorization");
 
@@ -40,7 +41,7 @@ const ChatComponent = ({ myGroup }) => {
     return () => {
       socketRef.current.disconnect();
     };
-  }, [groupId, groupName, nickname, token]);
+  }, []);
 
   function handleSendMessage() {
     if (messageInput) {
@@ -61,27 +62,42 @@ const ChatComponent = ({ myGroup }) => {
 
   return (
     <div>
-      <h2>Chat - {groupName}</h2>
-
+      <p className="chat-notice">
+        📣 당신과 대화를 나누는 상대는 누군가의 소중한 금지옥엽입니다. 융숭한
+        대접 부탁드립니다.
+      </p>
       <div
         ref={messageListRef}
         style={{ height: "400px", overflowY: "scroll", marginBottom: "10px" }}
       >
-        {messages.map((msg, idx) => (
-          <div key={idx}>
-            <strong>{msg.nickname}:</strong> {msg.content}
-          </div>
-        ))}
+        {messages.map((msg, idx) => {
+          if (msg.nickname == nickname)
+            return (
+              <div className="my-chat-box" key={idx}>
+                <p> {msg.content}</p>
+                <p className="chat-nickname">{msg.nickname}</p>
+              </div>
+            );
+          else
+            return (
+              <div className="chat-box" key={idx}>
+                <p> {msg.content}</p>
+                <p className="chat-nickname">{msg.nickname}</p>
+              </div>
+            );
+        })}
       </div>
 
-      <div>
+      <div className="chat-input-box">
         <input
+          className="chat-input"
           type="text"
           value={messageInput}
           onChange={(e) => setMessageInput(e.target.value)}
           placeholder="Type your message..."
         />
         <button
+          className="chat-button"
           onClick={(e) => {
             e.preventDefault();
             handleSendMessage();
